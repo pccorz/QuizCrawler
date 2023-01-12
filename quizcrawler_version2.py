@@ -1,118 +1,98 @@
-# from xml.sax import default_parser_list
+from xml.sax import default_parser_list
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 from bs4 import BeautifulSoup
-# import maskpass
-import tkinter as tk
-import re as reg
-import webbrowser
+import maskpass
 
 class Q:
     def __init__(self):
         self.title = 'UN'
         self.tpe = 'UN'
         self.ans = []
-
+# ansurl = 'https://docs.google.com/forms/d/e/1FAIpQLSch4RRpXGUeCN4PArZg0b3KbSj4tZVCsiDX9j7n5bJ2Ggv3yA/viewanalytics'
+# formurl = 'https://docs.google.com/forms/d/e/1FAIpQLSch4RRpXGUeCN4PArZg0b3KbSj4tZVCsiDX9j7n5bJ2Ggv3yA/viewform'
 ansurl = 'https://docs.google.com/forms/d/e/1FAIpQLSdgq2S6PHajiJNZPIbgX3Jb8HRF2suLl4yphDnvl0xw6Imc5w/viewanalytics'
 formurl = 'https://docs.google.com/forms/d/e/1FAIpQLSdgq2S6PHajiJNZPIbgX3Jb8HRF2suLl4yphDnvl0xw6Imc5w/viewform?hr_submission=ChkIvsOd5-YKEhAIgKD9n_EQEgcIhoa65-YKEAA'
 
-email = 'ck1100ddd@gl.ck.tp.edu.tw'
-password = 'testpwd'
+email = 'ck1100890@gl.ck.tp.edu.tw'
+password = 'hehehe'
 titleclass = 'M7eMe'
 
 #.replace(u'\n',u'').replace(u'\xa0',u'').replace(u' ',u'')
 chrome = ''
-def Login(number):
-    global email, password, chrome
-    if number == 1:
-        chrome.get('https://accounts.google.com/v3/signin/identifier?dsh=S-972875933%3A1672013913036171&hl=zh-tw&flowName=GlifWebSignIn&flowEntry=ServiceLogin&ifkv=AeAAQh6IJsqhC3os63jQ9MkZ2jtQJNLUYO1qh5WOTOs-_ezdN_HpCqAcDI6UUqX-MjuTm_K5nvF7')
-        usrname = chrome.find_element_by_id('identifierId')
-        usrname.send_keys(email)
-        usrname.send_keys(Keys.ENTER)
-    elif number == 2:
-    # input('press enter when at password page')
-        psw = chrome.find_element_by_name('Passwd')
-        psw.send_keys(password)
-        psw.send_keys(Keys.ENTER)
+def Login():
+    global email,password
+    chrome.get('https://accounts.google.com/v3/signin/identifier?dsh=S-972875933%3A1672013913036171&hl=zh-tw&flowName=GlifWebSignIn&flowEntry=ServiceLogin&ifkv=AeAAQh6IJsqhC3os63jQ9MkZ2jtQJNLUYO1qh5WOTOs-_ezdN_HpCqAcDI6UUqX-MjuTm_K5nvF7')
+    usrname = chrome.find_element_by_id('identifierId')
+    usrname.send_keys(email)
+    usrname.send_keys(Keys.ENTER)
+    input('press enter when at password page')
+    psw = chrome.find_element_by_name('Passwd')
+    psw.send_keys(password)
+    psw.send_keys(Keys.ENTER)
 
-def GetAns(url, number):
+def GetAns(url):
     global chrome
-    if number == 1:
-        chrome.get(url)
-    #input('press enter when done')
-    else:
-        soup = BeautifulSoup(chrome.page_source,'html.parser')
-        arr = []
-        details = soup.find_all(class_ = 'Aovyg')
-        dels = []
-        for i in range(len(details)):
-            if len(details[i].find_all('table')) == 0 and len(details[i].find_all(class_ = 'NC79P')) == 0:
-                dels.append(i);
-        dels.reverse()
-        for i in dels:
-            details.pop(i)
-        # print(len(details))
-        # for i in details:
-        #     print(i.text)
-        #     print('')
-    
-        for i in details:
-            tmp = Q()
-            tmp.title = i.find(class_ = 'myXFAc RjsPE').text.replace(u'\xa0',u'')
-            tmp.title = tmp.title.replace(u'\n',u'').replace(u' ',u'')
-            isbox = False
-            if i.find('table') != None:
-                for j in i.find('table').find('tbody').find_all('tr'):
-                    tmp.ans.append([])
-                    for k in j.find_all('td'):
-                        tmp.ans[-1].append(k.text)
-                    if len(tmp.ans[-1]) >2:
-                        isbox = True
-            else:
-                tmp.tpe = 'long'
-                tmp.ans = i.find(class_='NC79P').text+' ';
-            if isbox:
-                tmp.tpe = 'box'
-                choices = []
-                for j in i.find('table').find('thead').find_all('th'):
-                    if len(j.text) == 0:
-                        continue
-                    choices.append(j.text)
-                for j in range(len(tmp.ans)):
-                    biggest = 1
-                    for k in range(1,len(tmp.ans[j]),1):
-                        if int(tmp.ans[j][k])>int(tmp.ans[j][biggest]):
-                            biggest = k
-                    tmp.ans[j] = [tmp.ans[j][0].replace(u'\xa0',u'').replace(u'\n',u'').replace(u' ',u''),biggest-1]
-            arr.append(tmp);
-        for i in arr:
-            print(repr(i.title),end=":")
-            if type(i.ans) == str:
-                print(repr(i.ans))
-            else:
-                for j in i.ans:
-                    print(repr(j),end=',')
-            print('')
-        return arr
+    chrome.get(url)
+    input('press enter when done')
+    soup = BeautifulSoup(chrome.page_source,'html.parser')
+    arr = []
+    details = soup.find_all(class_ = 'Aovyg')
+    dels = []
+    for i in range(len(details)):
+        if len(details[i].find_all('table')) == 0 and len(details[i].find_all(class_ = 'NC79P')) == 0:
+            dels.append(i);
+    dels.reverse()
+    for i in dels:
+        details.pop(i)
+    # print(len(details))
+    # for i in details:
+    #     print(i.text)
+    #     print('')
+
+    for i in details:
+        tmp = Q()
+        tmp.title = i.find(class_ = 'myXFAc RjsPE').text.replace(u'\xa0',u'')
+        tmp.title = tmp.title.replace(u'\n',u'').replace(u' ',u'')
+        isbox = False
+        if i.find('table') != None:
+            for j in i.find('table').find('tbody').find_all('tr'):
+                tmp.ans.append([])
+                for k in j.find_all('td'):
+                    tmp.ans[-1].append(k.text)
+                if len(tmp.ans[-1]) >2:
+                    isbox = True
+        else:
+            tmp.tpe = 'long'
+            tmp.ans = i.find(class_='NC79P').text+' ';
+        if isbox:
+            tmp.tpe = 'box'
+            choices = []
+            for j in i.find('table').find('thead').find_all('th'):
+                if len(j.text) == 0:
+                    continue
+                choices.append(j.text)
+            for j in range(len(tmp.ans)):
+                biggest = 1
+                for k in range(1,len(tmp.ans[j]),1):
+                    if int(tmp.ans[j][k])>int(tmp.ans[j][biggest]):
+                        biggest = k
+                tmp.ans[j] = [tmp.ans[j][0].replace(u'\xa0',u'').replace(u'\n',u'').replace(u' ',u''),biggest-1]
+        arr.append(tmp);
+    for i in arr:
+        print(repr(i.title),end=":")
+        if type(i.ans) == str:
+            print(repr(i.ans))
+        else:
+            for j in i.ans:
+                print(repr(j),end=',')
+        print('')
+    return arr
 
 def WaitForKey():
     input('press enter to continue')
-
-    
-def InfoTop():
-    tk.messagebox.showinfo(title="Entering Personal Info", message='You can enter your email / Student ID # / Last 3 Digits of your ID No., e.g., ck11000890@gl.ck.tp.edu.tw / 11000890 / 890 are all acceptable')
-
-def TogglePwd():
-    global pwdHide
-    pwdHide = 1 - pwdHide
-    entryPwd.config(show="\u2022"*pwdHide)
-    root.update_idletasks()
-
-def webOpen():
-    ansurl = entryLink.get()[:formurl.find('viewform')]
-    ansurl += 'viewanalytics'
-    webbrowser.open(ansurl)
+    return;
 
 def FillIn(now,re):
     global chrome
@@ -205,129 +185,42 @@ def FillIn(now,re):
     print(re.tpe)
     return True
         
-def FillAns(url, refer, formSection):
+def FillAns(url,refer):
     global chrome
-    # print(taskSection)
-    if formSection == 1:
-        chrome.get(url)
-    # WaitForKey()
-    #while True:
-    else:
-        if formSection >= 3:
-            nxt = chrome.find_elements_by_css_selector('#mG61Hd > div.RH5hzf.RLS9Fe > div > div.ThHDze > div.DE3NNc.CekdCb > div.lRwqcd > div')[-1]#find next button
-            nxt.click()
-            time.sleep(1.5)
-        all_ = chrome.find_elements_by_class_name('Qr7Oae')
-        for now in all_:
-            tar = now.find_element_by_class_name(titleclass).text.replace(u'\xa0', u'')
+    chrome.get(url)
+    WaitForKey()
+    while True:
+        all = chrome.find_elements_by_class_name('Qr7Oae')
+        for now in all:
+            tar = now.find_element_by_class_name(titleclass).text.replace(u'\xa0',u'')
             tar = tar.replace(u'\n',u'').replace(u' ',u'')
-            print(str(tar))
+            print(repr(tar))
             for j in range(len(refer)):
                 if refer[j].title[:min(len(refer[j].title),len(tar))] == tar[:min(len(refer[j].title),len(tar))]:
                     if FillIn(now,refer[j]):
                         print('in')
                         refer.pop(j)
                         break
+        WaitForKey()
+        nxt = chrome.find_elements_by_css_selector('#mG61Hd > div.RH5hzf.RLS9Fe > div > div.ThHDze > div.DE3NNc.CekdCb > div.lRwqcd > div')[-1]#find next button
+        nxt.click()
+        time.sleep(1.5)
     return
 
 def Ask():
-    global ansurl, formurl, email, password
-    email = entryEmail.get()
-    if reg.match(r'ck1100\d{3}@gl.ck.tp.edu.tw', email):
-        pass
-    elif reg.match(r'\d{3}', email):
-        email = f"ck1100{email}@gl.ck.tp.edu.tw"
-    elif reg.match(r'\d{7}', email):
-        email = f"ck{email}@gl.ck.tp.edu.tw"
-    elif reg.match(r'\d{8}', email):
-        email = email[:4] + email[5:]
-        email = f"ck{email}@gl.ck.tp.edu.tw"
-    else:
-        email = 'error'
-    password = entryPwd.get()
-    formurl = entryLink.get()
-    ansurl = formurl[:formurl.find('viewform')]
-    ansurl += 'viewanalytics'
-    
-    '''email = input('enter email:\n')
+    global ansurl,formurl,email,password
+    email = input('enter email:\n')
     password = maskpass.advpass()
     formurl = input('enter form link\n')
     ansurl = formurl[:formurl.find('viewform')]
     ansurl += 'viewanalytics'
-    print(ansurl)'''
-    
+    print(ansurl)
 
-def Continue():
-    global ansurl, formurl, email, password, chrome, taskSection, arr, formSection
-    taskSection += 1
-    if taskSection == 1:
-        statusVar.set("Press Continue when at password page")
-        Ask()
-        isLink = r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)'
-        if email== 'error' or (not reg.match(isLink, formurl)):
-            taskSection = 0
-            return
-        else:
-            chrome = webdriver.Chrome('./chromedriver')
-            Login(1)
-    elif taskSection == 2:
-        statusVar.set("Press Continue when page finish loading...")
-        Login(2)
-    elif taskSection == 3:
-        statusVar.set("Press Continue again when page finish loading...")
-        GetAns(ansurl, 1)
-    elif taskSection == 4:
-        statusVar.set("")
-        root.update_idletasks()
-        statusVar.set("Please wait patiently while loading... Fetching answers...")
-        root.update_idletasks()
-        arr = GetAns(ansurl, 2)
-        statusVar.set("Done! Press Continue...")
-    elif taskSection >= 5:
-        if taskSection==5: statusVar.set("Make sure the form is empty!...")
-        else: statusVar.set('Entering the answers...') 
-        formSection += 1
-        # statusVar.set("Entering the answers...")
-        root.update_idletasks()
-        FillAns(formurl,arr, formSection)
-        if taskSection>=6: statusVar.set("Press Continue...")
-
-
-arr = []
-taskSection = 0
-formSection = 0
-pwdHide = 1
-
-root = tk.Tk()
-win = tk.Frame(root)
-root.title("Quiz Crawler")
-root.resizable(False, False)
-statusVar = tk.StringVar()
-statusVar.set('Press the button to continue') 
-
-title = tk.Label(text="Quiz Crawler", font=("Helvetica", 15))
-title.grid(column=0,row=0, padx=10, pady=10, columnspan=3)
-labelEmail = tk.Label(text="Enter Prsn Info:")
-labelEmail.grid(column=0,row=1,sticky='e', padx=10, pady=4)
-entryEmail = tk.Entry(width=25)
-entryEmail.grid(column=1,row=1,sticky='w', pady=4)
-btnEmailNote = tk.Button(text='?', command=InfoTop, width=2,relief='groove')
-btnEmailNote.grid(column=2,row=1, padx=5)
-labelPwd = tk.Label(text="Enter password:")
-labelPwd.grid(column=0,row=2,sticky='e', padx=10, pady=4)
-entryPwd = tk.Entry(width=25, show="\u2022"*pwdHide)
-entryPwd.grid(column=1,row=2,sticky='w', pady=4)
-btnShowPwd = tk.Button(text='\uD83D\uDC41', width=2, command=TogglePwd,relief='groove')
-btnShowPwd.grid(column=2,row=2, padx=5)
-labelLink = tk.Label(text="Enter form link:")
-labelLink.grid(column=0,row=3,sticky='e', padx=10, pady=4)
-entryLink = tk.Entry(width=25)
-entryLink.grid(column=1,row=3,columnspan=3,sticky='w', pady=4)
-btnToLink = tk.Button(text='\u29C9', width=2, command=webOpen,relief='groove')
-btnToLink.grid(column=2,row=3, padx=5)
-statuslbl = tk.Label(textvariable=statusVar, fg='green')
-statuslbl.grid(column=0,row=4,columnspan=3)
-btnContinue = tk.Button(text="Continue", command=Continue)
-btnContinue.grid(column=0,row=5,columnspan=3,pady=4)
-
-root.mainloop()
+if __name__ == '__main__':
+    Ask()
+    chrome = webdriver.Chrome('./chromedriver')
+    Login()
+    WaitForKey()
+    arr = GetAns(ansurl)
+    WaitForKey()
+    FillAns(formurl,arr)
