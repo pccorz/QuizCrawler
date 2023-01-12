@@ -20,6 +20,6 @@ v1 需要 answer link，version2 爬 viewanalytics <br>
 [作品網站](https://pccorz.github.io) <br>
 [PCC 古巴共產黨](https://zh.wikipedia.org/zh-tw/%E5%8F%A4%E5%B7%B4%E5%85%B1%E4%BA%A7%E5%85%9A)<br>
 [PCC GOV](https://web.pcc.gov.tw/pis/)<br>
-[PCC ORG](pcc.org)<br>
-[PCC COM](pcc.com)<br>
+[PCC ORG](https://pcc.org)<br>
+[PCC COM](https://pcc.com)<br>
 > Good Luck & Have Fun!
